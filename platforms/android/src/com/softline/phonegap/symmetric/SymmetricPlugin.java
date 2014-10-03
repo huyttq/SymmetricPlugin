@@ -1,7 +1,5 @@
 package com.softline.phonegap.symmetric;
 
-import com.softline.symmetric.android;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +13,8 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
+
+import com.softline.symmetric.android.SymmetricEngine;
 
 public class SymmetricPlugin extends CordovaPlugin {
 	private static final String START_ENGINE = "startEngine";
