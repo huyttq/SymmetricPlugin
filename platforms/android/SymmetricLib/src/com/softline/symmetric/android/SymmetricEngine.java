@@ -17,14 +17,11 @@ import android.net.Uri;
 public class SymmetricEngine {
 	private final Context mCtx;
 	private DatabaseHelper mDbHelper;
-	//private String mCreateScript;
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
-		//private String mCreateScript;
 
         DatabaseHelper(Context context, String databaseName, int version) {
             super(context, databaseName, null, version);
-            //this.mCreateScript = createScript;
         }
 
         @Override
@@ -33,16 +30,11 @@ public class SymmetricEngine {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            /*Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS notes");
-            onCreate(db);*/
         }
     }
 
 	public SymmetricEngine(Context ctx) {
         this.mCtx = ctx;
-        //this.mCreateScript = createScript;
     }
 
 	public String start(Uri registrationUrl, String groupId, String deviceId, String databaseName, int databaseVersion) throws SQLException {
@@ -70,11 +62,11 @@ public class SymmetricEngine {
     }
 
 	public void stop(String intentUri) {
-        try {
+    try {
 			mCtx.stopService(Intent.parseUri(intentUri, 0));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+  }
 }

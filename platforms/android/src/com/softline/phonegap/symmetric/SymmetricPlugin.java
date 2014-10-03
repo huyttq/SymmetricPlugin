@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.text.Html;
+import android.content.Context;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -28,6 +29,8 @@ public class SymmetricPlugin extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 		try {
+			Context cordovaCtx = this.cordova.getActivity();
+
 			if (action.equals(START_ENGINE)) {
 				// Parse the arguments
 				JSONObject obj = args.getJSONObject(0);
@@ -36,9 +39,14 @@ public class SymmetricPlugin extends CordovaPlugin {
 				String deviceId = obj.has(DEVICE_ID) ? obj.getString(DEVICE_ID) : null;
 				String databaseName = obj.has(DATABASE_NAME) ? obj.getString(DATABASE_NAME) : null;
 
-				SymmetricEngine symEngine = new SymmetricEngine(this.cordova.getActivity());
-				String intentUri = symEngine.start(registrationUrl, groupId, deviceId, databaseName, 1);
-				callbackContext.success(intentUri);
+				this.cordova.getThreadPool().execute(new Runnable() {
+					@Override
+					public void run() {
+						SymmetricEngine symEngine = new SymmetricEngine(cordovaCtx);
+						String intentUri = symEngine.start(registrationUrl, groupId, deviceId, databaseName, 1);
+						callbackContext.success(intentUri);
+					}
+				});
 
 				return true;
 			}
@@ -46,9 +54,14 @@ public class SymmetricPlugin extends CordovaPlugin {
 				JSONObject obj = args.getJSONObject(0);
 				String intentUri = obj.has(INTENT_URI) ? obj.getString(INTENT_URI) : null;
 
-				SymmetricEngine symEngine = new SymmetricEngine(this.cordova.getActivity());
-				symEngine.stop(intentUri);
-				
+				this.cordova.getThreadPool().execute(new Runnable() {
+					@Override
+					public void run() {
+						SymmetricEngine symEngine = new SymmetricEngine(cordovaCtx);
+						symEngine.stop(intentUri);
+					}
+				});
+
 				return true;
 			}
 
